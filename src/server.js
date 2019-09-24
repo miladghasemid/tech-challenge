@@ -11,6 +11,7 @@ const
 	albumsRoutes = require('./routes/albums.js')
 	photosRoutes = require('./routes/photos.js')
 
+	//todo: move to init mongo file and require here
 mongoose.set('useCreateIndex', true)
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, (err) => {
 	console.log(err || `Connected to MongoDB.`)

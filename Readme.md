@@ -8,3 +8,5 @@ note that if there is any vulneberaties, run:
 ```sh
 npm update
 ```
+
+password for all users: 123
