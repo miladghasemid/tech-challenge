@@ -8,6 +8,8 @@ const
 	MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/react-express-jwt',
 	PORT = process.env.PORT || 3001,
 	usersRoutes = require('./routes/users.js')
+	albumsRoutes = require('./routes/albums.js')
+	photosRoutes = require('./routes/photos.js')
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, (err) => {
@@ -23,6 +25,8 @@ app.get('/api', (req, res) => {
 })
 
 app.use('/api/users', usersRoutes)
+app.use('/api/albums', albumsRoutes)
+app.use('/api/photos', photosRoutes)
 
 app.use('*', (req, res) => {
 	res.sendFile(`${__dirname}/client/build/index.html`)
