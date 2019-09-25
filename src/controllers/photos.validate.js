@@ -5,6 +5,7 @@ const { check } = require('express-validator')
 
 exports.index= [
     check('albumId')
+    .optional()
     .exists()
     .withMessage('MISSING')
     .isDecimal()
@@ -35,6 +36,8 @@ exports.create = [
     check('title')
     .exists()
     .withMessage('MISSING')
+    .isString()
+    .withMessage('should be string')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY'),

@@ -45,7 +45,7 @@ module.exports = {
         albumObj.userId = req.user.id;
         Album.find({id: albumObj.id}, (err, albums) => {
 
-            if(albums.count){
+            if(albums.length){
                 return res.json({success: false, message: "album with this id already exists!"})
             }else{
                 Album.create(albumObj, (err, album) => {

@@ -25,7 +25,7 @@ const
  *           type: string
  *       - in: query
  *         name: albumId
- *         description: albumId
+ *         description: albumId is optional to filter
  *         schema:
  *           type: integer
  */

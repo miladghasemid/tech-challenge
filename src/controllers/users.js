@@ -32,8 +32,8 @@ module.exports = {
 		  } 
 		  User.find({id: req.body.id}, (err, users) => {
 
-			if(users.count){
-				return res.json({success: false, message: "photo with this id already exists!"})
+			if(users.length){
+				return res.json({success: false, message: "user with this id already exists!"})
 			}else{
 				User.create(req.body, (err, user) => {
 					if(err) return res.json({success: false, code: err.code})
@@ -54,7 +54,7 @@ module.exports = {
 			return res.status(422).jsonp(errors.array());
 		  } 
 
-		var query = {'id':req.user.id};
+		var query = {id:req.user.id};
 		req.body.id = req.user.id;
 		User.findOneAndUpdate(query, req.body, {upsert:true}, function(err, doc){
 			if (err) return res.send(500, { error: err });

@@ -26,6 +26,8 @@ exports.create = [
     check('title')
     .exists()
     .withMessage('MISSING')
+    .isString()
+    .withMessage('should be string')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')

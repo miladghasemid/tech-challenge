@@ -61,7 +61,7 @@ module.exports = {
             //TODO: refactor this part
             Photo.find({id: photoObj.id}, (err, photos) => {
 
-                if(photos.count){
+                if(photos.length){
                     return res.json({success: false, message: "photo with this id already exists!"})
                 }else{
                     Photo.create(photoObj, (err, photo) => {

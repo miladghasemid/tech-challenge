@@ -12,11 +12,12 @@ exports.show = [
     .withMessage('MISSING')
     .isDecimal()
     .withMessage('not a nubmer')
+    .custom((value, {req}) => (value === req.user.id))
+    .withMessage("cannot show another user's info")
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
-    .custom((value, {req}) => (value === req.user.id))
-    .withMessage("cannot change another user's info")
+
   ]
 
 
@@ -38,6 +39,8 @@ exports.create = [
     check('password')
     .exists()
     .withMessage('MISSING')
+    .isString()
+    .withMessage('password should be string')
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
@@ -49,12 +52,16 @@ exports.create = [
     .optional()
     .not()
     .isEmpty()
-    .withMessage('IS_EMPTY'),
-    check('username')
+    .withMessage('IS_EMPTY')
+    .isString()
+    .withMessage('should be string'),
+  check('username')
     .optional()
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
+    .isString()
+    .withMessage('should be string')
     
 ]
 
@@ -64,8 +71,8 @@ exports.update = [
   .withMessage('MISSING')
   .isDecimal()
   .withMessage('not a nubmer')
-  .custom((value, {req}) => (value === req.user.id))
-  .withMessage("cannot change another user's info"),
+  .custom((value, {req}) => (value == req.user.id))
+  .withMessage("cannot change another user's info!"),
   check('email')
     .optional()
     .not()
@@ -86,12 +93,16 @@ exports.update = [
     .optional()
     .not()
     .isEmpty()
-    .withMessage('IS_EMPTY'),
+    .withMessage('IS_EMPTY')
+    .isString()
+    .withMessage('should be string'),
     check('username')
     .optional()
     .not()
     .isEmpty()
     .withMessage('IS_EMPTY')
+    .isString()
+    .withMessage('should be string')
   
 ]
 
@@ -101,11 +112,12 @@ exports.destroy = [
   .withMessage('MISSING')
   .isDecimal()
   .withMessage('not a nubmer')
+  .custom((value, {req}) => (value == req.user.id))
+  .withMessage("cannot delete another user's account!")
   .not()
   .isEmpty()
   .withMessage('IS_EMPTY')
-  .custom((value, {req}) => (value === req.user.id))
-  .withMessage("cannot delete another user's account")
+  
 ]
 
 exports.authenticate = [
@@ -116,6 +128,8 @@ exports.authenticate = [
   .isEmail()
   .withMessage('EMAIL_IS_NOT_VALID'),
   check('password')
+  .isString()
+  .withMessage('password should be string')
   .not()
   .isEmpty()
   .withMessage('IS_EMPTY')

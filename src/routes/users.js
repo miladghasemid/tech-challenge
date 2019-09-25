@@ -240,7 +240,7 @@ usersRouter.post('/authenticate',validate.authenticate, usersCtrl.authenticate)
  *         name: id
  *         description: id of user
  *         schema:
- *           type: string
+ *           type: integer
  *       - in: query
  *         name: token
  *         description: token
