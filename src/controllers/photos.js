@@ -4,7 +4,13 @@ const Album = require('../models/Album.js')
 module.exports = {
 
     index: (req, res) => {
-		Album.find({userId: req.user.id}, (err, albums) => {
+        var query;
+        if(req.query.albumId != undefined){
+            query = {userId: req.user.id, id:req.query.albumId}
+        }else{
+            query = {userId: req.user.id}
+        }
+		Album.find(query, (err, albums) => {
             var albumIds = albums.map(function(el) { return el.id } );
             Photo.find({ "albumId": { $in: albumIds } },function(err,photos) {
                 res.json(photos)
