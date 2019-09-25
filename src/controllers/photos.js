@@ -1,9 +1,14 @@
 const Photo = require('../models/Photo.js')
 const Album = require('../models/Album.js')
+const { check, validationResult } = require('express-validator');
 
 module.exports = {
 
     index: (req, res) => {
+        const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(422).jsonp(errors.array());
+		  } 
         var query;
         if(req.query.albumId != undefined){
             query = {userId: req.user.id, id:req.query.albumId}
@@ -20,6 +25,10 @@ module.exports = {
 	},
     // 
     show: (req, res) => {
+        const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(422).jsonp(errors.array());
+		  } 
         Album.find({userId: req.user.id}, (err, albums) => {
             var albumIds = albums.map(function(el) { return el.id } );
             Photo.findOne({ id: req.params.id,albumId: { $in: albumIds } },function(err,photo) {
@@ -35,6 +44,10 @@ module.exports = {
     },
     // create a new photo
 	create: (req, res) => {
+        const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			return res.status(422).jsonp(errors.array());
+		  } 
         var photoObj = req.body;
         Album.findOne({id: photoObj.albumId}, (err, album) => {
             // if there's no album
@@ -45,10 +58,20 @@ module.exports = {
                 return res.json({success: false, message: "album belongs to another user!"})                
             }
             
-            Photo.create(photoObj, (err, photo) => {
-                if(err) return res.json({success: false, code: err.code})
-                res.json({success: true, message: "Photo created.",photo})
+            //TODO: refactor this part
+            Photo.find({id: photoObj.id}, (err, photos) => {
+
+                if(photos.count){
+                    return res.json({success: false, message: "photo with this id already exists!"})
+                }else{
+                    Photo.create(photoObj, (err, photo) => {
+                        if(err) return res.json({success: false, code: err.code})
+                        res.json({success: true, message: "Photo created.",photo})
+                    })
+                }
+
             })
+            
         })
 
 	},

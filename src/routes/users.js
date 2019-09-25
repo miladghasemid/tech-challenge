@@ -2,6 +2,7 @@ const
 	express = require('express'),
 	usersRouter = new express.Router(),
 	usersCtrl = require('../controllers/users.js'),
+	validate = require('../controllers/users.validate.js'),
 	verifyToken = require('../serverAuth.js').verifyToken
 
 
@@ -19,7 +20,7 @@ usersRouter.route('/')
  *       200:
  *         description: Success get all items
  */
-	.get(usersCtrl.index)
+	.get(validate.index,usersCtrl.index)
 
 	/**
  * @swagger
@@ -86,7 +87,7 @@ usersRouter.route('/')
  *              password:
  *                type: string
  */
-	.post(usersCtrl.create)
+	.post(validate.create,usersCtrl.create)
 
 
 
@@ -117,7 +118,7 @@ usersRouter.route('/')
  *              password:
  *                type: string
  */
-usersRouter.post('/authenticate', usersCtrl.authenticate)
+usersRouter.post('/authenticate',validate.authenticate, usersCtrl.authenticate)
 
 	/**
  * @swagger
@@ -136,7 +137,7 @@ usersRouter.post('/authenticate', usersCtrl.authenticate)
  *         name: id
  *         description: id of user
  *         schema:
- *           type: string
+ *           type: integer
  *       - in: query
  *         name: token
  *         description: token
@@ -166,7 +167,7 @@ usersRouter.post('/authenticate', usersCtrl.authenticate)
  *         name: id
  *         description: id of user
  *         schema:
- *           type: string
+ *           type: integer
  *       - in: query
  *         name: token
  *         description: token
@@ -253,8 +254,8 @@ usersRouter.post('/authenticate', usersCtrl.authenticate)
  */
 usersRouter.use(verifyToken)
 usersRouter.route('/:id')
-	.get(usersCtrl.show)	
-	.put(usersCtrl.update)
-	.delete(usersCtrl.destroy)
+	.get(validate.show,usersCtrl.show)	
+	.put(validate.update,usersCtrl.update)
+	.delete(validate.destroy,usersCtrl.destroy)
 
 module.exports = usersRouter

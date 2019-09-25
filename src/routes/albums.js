@@ -2,6 +2,7 @@ const
 	express = require('express'),
 	albumsRouter = new express.Router(),
 	albumsCtrl = require('../controllers/albums.js'),
+	validate = require('../controllers/albums.validate.js'),
 	verifyToken = require('../serverAuth.js').verifyToken
 
     /**
@@ -68,8 +69,8 @@ const
  */
     albumsRouter.use(verifyToken)
     albumsRouter.route('/')
-	.get(albumsCtrl.index)
-	.post(albumsCtrl.create)
+	.get(validate.index,albumsCtrl.index)
+	.post(validate.create,albumsCtrl.create)
 
     
         /**
@@ -89,7 +90,7 @@ const
  *         name: id
  *         description: album id
  *         schema:
- *           type: string
+ *           type: integer
  *       - in: query
  *         name: token
  *         description: token
@@ -102,7 +103,7 @@ const
  *                type: string
  */
     albumsRouter.route('/:id')
-	.get(albumsCtrl.show)
+	.get(validate.show,albumsCtrl.show)
 	//.patch(albumsCtrl.update)
 	//.delete(albumsCtrl.destroy)
 

@@ -2,6 +2,7 @@ const
 	express = require('express'),
 	photosRouter = new express.Router(),
 	photosCtrl = require('../controllers/photos.js'),
+	validate = require('../controllers/photos.validate.js'),
 	verifyToken = require('../serverAuth.js').verifyToken
 
        /**
@@ -78,8 +79,8 @@ const
  */
     photosRouter.use(verifyToken)
     photosRouter.route('/')
-	.get(photosCtrl.index)
-	.post(photosCtrl.create)
+	.get(validate.index,photosCtrl.index)
+	.post(validate.create,photosCtrl.create)
  
             /**
  * @swagger
@@ -98,7 +99,7 @@ const
  *         name: id
  *         description: photo id
  *         schema:
- *           type: string
+ *           type: integer
  *       - in: query
  *         name: token
  *         description: token
@@ -111,7 +112,7 @@ const
  *                type: string
  */
     photosRouter.route('/:id')
-	.get(photosCtrl.show)
+	.get(validate.show,photosCtrl.show)
 	//.patch(photosCtrl.update)
 	//.delete(photosCtrl.destroy)
 
