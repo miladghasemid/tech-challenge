@@ -39,7 +39,7 @@ userSchema.methods.validPassword = function(password) {
 // middleware: before saving, check if password was changed,
 // and if so, encrypt new password before saving:
 userSchema.pre('save', function(next) {
-	if(this.isModified('password')) {
+	if(this.password != undefined && this.isModified('password')) {
 		this.password = this.generateHash(this.password)
 	}
 	next()

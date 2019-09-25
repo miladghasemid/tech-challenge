@@ -13,7 +13,7 @@ module.exports = {
 	show: (req, res) => {
 		console.log("Current User:")
 		console.log(req.user)
-		User.findById(req.params.id, (err, user) => {
+		User.find({id:req.params.id}, (err, user) => {
 			res.json(user)
 		})
 	},
@@ -30,17 +30,21 @@ module.exports = {
 
 	// update an existing user
 	update: (req, res) => {
-		User.findById(req.params.id, (err, user) => {
-			Object.assign(user, req.body)
-			user.save((err, updatedUser) => {
-				res.json({success: true, message: "User updated.", user})
-			})
-		})
+		if (req.user.id != req.params.id){
+			return res.send(500, { error: "cannot change another user's info" });
+		}
+		var query = {'id':req.user.id};
+		req.body.id = req.user.id;
+		User.findOneAndUpdate(query, req.body, {upsert:true}, function(err, doc){
+			if (err) return res.send(500, { error: err });
+			return res.send("succesfully saved");
+		});
 	},
 
 	// delete an existing user
 	destroy: (req, res) => {
-		User.findByIdAndRemove(req.params.id, (err, user) => {
+		User.find({id:req.params.id}).remove( (err, user) => {
+			if (err) return res.send(500, { error: err });
 			res.json({success: true, message: "User deleted.", user})
 		})
 	},

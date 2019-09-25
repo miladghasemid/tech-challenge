@@ -11,7 +11,31 @@ const
 	albumsRoutes = require('./routes/albums.js')
 	photosRoutes = require('./routes/photos.js')
 
-	//todo: move to init mongo file and require here
+//swagger documentation
+var swaggerUi = require('swagger-ui-express'); 
+var swaggerJSDoc = require('swagger-jsdoc'); 
+
+//TODO: add default path to each routes and /api to all routes
+var options = { 
+	swaggerDefinition: {
+		info: {
+		title: 'mavennet photo gallery API documentation', // Title (required)
+		version: '1.0.0', // Version (required)
+		},
+	},
+	apis: ['./routes/*'], // Path to the API docs
+	};
+var swaggerSpec = swaggerJSDoc(options); 
+
+app.get('/api/api-docs.json', function(req, res) { 
+res.setHeader('Content-Type', 'application/json');
+res.send(swaggerSpec);
+});
+
+
+app.use('/api/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
+
+//TODO: move to init mongo file and require here
 mongoose.set('useCreateIndex', true)
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true }, (err) => {
 	console.log(err || `Connected to MongoDB.`)
@@ -22,7 +46,7 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 
 app.get('/api', (req, res) => {
-	res.json({message: "API root."})
+	res.redirect('/api/api-docs');
 })
 
 app.use('/api/users', usersRoutes)
